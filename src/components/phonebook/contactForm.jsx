@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 function ContactForm({ onSubmit }) {
 
-    let [state, setState] = useState({
+    const [state, setState] = useState({
         name: '',
         number: '',
     });
