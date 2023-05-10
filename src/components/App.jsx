@@ -9,6 +9,8 @@ import Filter from "./contacts/Filter";
 function App() {
   const [contacts, setContacts] = useState(initialContacts);
   const [filter, setFilter] = useState('');
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase()));
 
   useEffect(() => {
     const storedContacts = localStorage.getItem('contacts');
@@ -21,27 +23,23 @@ function App() {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const deleteContact = (contactId) => {
-    setContacts(prevContacts => prevContacts.filter(contact => contactId !== contact.id));
+  function deleteContact(contactId) {
+    setContacts(state => state.filter(contact => contactId !== contact.id));
   };
 
-  const addContact = (data) => {
+  function addContact (data) {
     if (contacts.some(contact => contact.name === data.name)) {
       Notify.warning(`${data.name} is already in contacts`)
       return;
     }
     const id = nanoid();
     const contact = { id: id, name: data.name, number: data.number };
-    setContacts(prevContacts => [contact, ...prevContacts]);
+    setContacts(state => [contact, ...state]);
   };
 
-  const handleFilterChange = (event) => {
+  function handleFilterChange(event) {
     setFilter(event.currentTarget.value);
   };
-
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
 
   return (
     <div
